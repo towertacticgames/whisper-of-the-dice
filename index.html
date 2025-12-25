@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🔮 Board Game Tarot Personality Test</title>
+    
+    <!-- Import Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Athiti:wght@400;500;600;700&family=Kanit:wght@300;400;500;600&family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
+    <!-- html-to-image -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #2a2d43; 
+            --secondary-color: #4a4e69; 
+            --accent-color: #c9ada7; 
+            --highlight-color: #d4a373; 
+            --bg-color: #130023;
+            --white: #ffffff;
+            --card-radius: 20px;
+            
+            /* --- Backgrounds --- */
+            --intro-background: url('images/intro_background.png');
+            
+            /* Quiz Backgrounds */
+            --quiz-first-background: url('images/quiz_bg_1.png');
+            --quiz-second-background: url('images/quiz_bg_2.png');
+            --quiz-third-background: url('images/quiz_bg_3.png');
+            --quiz-fourth-background: url('images/quiz_bg_4.png');
+            --quiz-fifth-background: url('images/quiz_bg_5.png');
+            --quiz-sixth-background: url('images/quiz_bg_6.png');
+            --quiz-seventh-background: url('images/quiz_bg_7.png');
+
+            /* --- Card Images --- */
+            --card-back: url('images/card_back.png');
+            
+            --card-front-thefool: url('images/card_the_fool.png');
+            --card-front-themagician: url('images/card_the_magician.png');
+            --card-front-thehighpriestess: url('images/card_the_high_priestess.png');
+            --card-front-theempress: url('images/card_the_empress.png');
+            --card-front-theemperor: url('images/card_the_emperor.png');
+            --card-front-thehierophant: url('images/card_the_hierophant.png');
+            --card-front-thelovers: url('images/card_the_lovers.png');
+            --card-front-thechariot: url('images/card_the_chariot.png');
+            --card-front-strength: url('images/card_strength.png');
+            --card-front-thehermit: url('images/card_the_hermit.png');
+            --card-front-wheeloffortune: url('images/card_wheel_of_fortune.png');
+            --card-front-justice: url('images/card_justice.png');
+            --card-front-thehangedman: url('images/card_the_hanged_man.png');
+            --card-front-death: url('images/card_death.png');
+            --card-front-temperance: url('images/card_temperance.png');
+            --card-front-thedevil: url('images/card_the_devil.png');
+            --card-front-thetower: url('images/card_the_tower.png');
+            --card-front-thestar: url('images/card_the_star.png');
+            --card-front-themoon: url('images/card_the_moon.png');
+            --card-front-thesun: url('images/card_the_sun.png');
+            --card-front-judgement: url('images/card_judgement.png');
+            --card-front-theworld: url('images/card_the_world.png');
+
+            /* --- Result Summary Images (9:16 for Image Tag) --- */
+            --result-img-thefool: url('images/summary_the_fool.png');
+            --result-img-themagician: url('images/summary_the_magician.png');
+            --result-img-thehighpriestess: url('images/summary_the_high_priestess.png');
+            --result-img-theempress: url('images/summary_the_empress.png');
+            --result-img-theemperor: url('images/summary_the_emperor.png');
+            --result-img-thehierophant: url('images/summary_the_hierophant.png');
+            --result-img-thelovers: url('images/summary_the_lovers.png');
+            --result-img-thechariot: url('images/summary_the_chariot.png');
+            --result-img-strength: url('images/summary_strength.png');
+            --result-img-thehermit: url('images/summary_the_hermit.png');
+            --result-img-wheeloffortune: url('images/summary_wheel_of_fortune.png');
+            --result-img-justice: url('images/summary_justice.png');
+            --result-img-thehangedman: url('images/summary_the_hanged_man.png');
+            --result-img-death: url('images/summary_death.png');
+            --result-img-temperance: url('images/summary_temperance.png');
+            --result-img-thedevil: url('images/summary_the_devil.png');
+            --result-img-thetower: url('images/summary_the_tower.png');
+            --result-img-thestar: url('images/summary_the_star.png');
+            --result-img-themoon: url('images/summary_the_moon.png');
+            --result-img-thesun: url('images/summary_the_sun.png');
+            --result-img-judgement: url('images/summary_judgement.png');
+            --result-img-theworld: url('images/summary_the_world.png');
+
+            /* --- Result Backgrounds (For Fullscreen Blurred BG) --- */
+            --result-thefool-background: url('images/result_the_fool.png');
+            --result-themagician-background: url('images/result_the_magician.png');
+            --result-thehighpriestess-background: url('images/result_the_high_priestess.png');
+            --result-theempress-background: url('images/result_the_empress.png');
+            --result-theemperor-background: url('images/result_the_emperor.png');
+            --result-thehierophant-background: url('images/result_the_hierophant.png');
+            --result-thelovers-background: url('images/result_the_lovers.png');
+            --result-thechariot-background: url('images/result_the_chariot.png');
+            --result-strength-background: url('images/result_strength.png');
+            --result-thehermit-background: url('images/result_the_hermit.png');
+            --result-wheeloffortune-background: url('images/result_wheel_of_fortune.png');
+            --result-justice-background: url('images/result_justice.png');
+            --result-thehangedman-background: url('images/result_the_hanged_man.png');
+            --result-death-background: url('images/result_death.png');
+            --result-temperance-background: url('images/result_temperance.png');
+            --result-thedevil-background: url('images/result_the_devil.png');
+            --result-thetower-background: url('images/result_the_tower.png');
+            --result-thestar-background: url('images/result_the_star.png');
+            --result-themoon-background: url('images/result_the_moon.png');
+            --result-thesun-background: url('images/result_the_sun.png');
+            --result-judgement-background: url('images/result_judgement.png');
+            --result-theworld-background: url('images/result_the_world.png');
+            
+            --result-fallback-background: linear-gradient(to bottom right, #ffffff, #f8f9fa);
+
+            /* --- Popup Backgrounds (9:16) --- */
+            --popup-bg-thefool: url('images/popup_bg_the_fool.png');
+            --popup-bg-themagician: url('images/popup_bg_the_magician.png');
+            --popup-bg-thehighpriestess: url('images/popup_bg_the_high_priestess.png');
+            --popup-bg-theempress: url('images/popup_bg_the_empress.png');
+            --popup-bg-theemperor: url('images/popup_bg_the_emperor.png');
+            --popup-bg-thehierophant: url('images/popup_bg_the_hierophant.png');
+            --popup-bg-thelovers: url('images/popup_bg_the_lovers.png');
+            --popup-bg-thechariot: url('images/popup_bg_the_chariot.png');
+            --popup-bg-strength: url('images/popup_bg_strength.png');
+            --popup-bg-thehermit: url('images/popup_bg_the_hermit.png');
+            --popup-bg-wheeloffortune: url('images/popup_bg_wheel_of_fortune.png');
+            --popup-bg-justice: url('images/popup_bg_justice.png');
+            --popup-bg-thehangedman: url('images/popup_bg_the_hanged_man.png');
+            --popup-bg-death: url('images/popup_bg_death.png');
+            --popup-bg-temperance: url('images/popup_bg_temperance.png');
+            --popup-bg-thedevil: url('images/popup_bg_the_devil.png');
+            --popup-bg-thetower: url('images/popup_bg_the_tower.png');
+            --popup-bg-thestar: url('images/popup_bg_the_star.png');
+            --popup-bg-themoon: url('images/popup_bg_the_moon.png');
+            --popup-bg-thesun: url('images/popup_bg_the_sun.png');
+            --popup-bg-judgement: url('images/popup_bg_judgement.png');
+            --popup-bg-theworld: url('images/popup_bg_the_world.png');
+
+            /* --- Promo --- */
+            --promo-banner-img: url('images/promo_banner.png'); 
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            transition: opacity 0.5s ease;
+        }
+
+        /* --- Screens Container --- */
+        .screen {
+            display: none;
+            flex-direction: column;
+            min-height: 100vh;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+            background-size: 100% auto;
+            background-position: top center;
+            background-repeat: no-repeat;
+        }
+        .screen.active { display: flex; opacity: 1; }
+
+        /* Intro, Quiz, Loading, Reveal Styles */
+        #intro-screen { background-image: var(--intro-background); padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; animation: fadeInBg 1.5s ease-out forwards; }
+        .intro-content { width: 100%; padding-top: 100px; padding-left: 30px; padding-right: 30px; display: flex; flex-direction: column; align-items: center; }
+        #intro-desc { color: white; margin-bottom: 40px; line-height: 1.7; text-align: center; font-family: 'Kanit', sans-serif; font-size: 1.1rem; text-shadow: 0 2px 8px rgba(0,0,0,0.8); min-height: 200px; }
+        #skip-btn { position: absolute; top: 20px; right: 20px; background: rgba(255, 255, 255, 0.15); color: rgba(255, 255, 255, 0.9); border: 1px solid rgba(255, 255, 255, 0.3); padding: 6px 14px; border-radius: 20px; font-family: 'Kanit', sans-serif; font-size: 0.85rem; cursor: pointer; z-index: 50; transition: opacity 0.5s ease-in-out; backdrop-filter: blur(4px); display: none; opacity: 0; }
+        #skip-btn:hover { background: rgba(255, 255, 255, 0.3); color: white; }
+        .btn-start { background: white; color: #A61F26; font-family: 'Kanit', sans-serif; font-size: 1.2rem; font-weight: 600; padding: 10px 15px; border-radius: 100vh; border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: transform 0.2s, box-shadow 0.2s, opacity 0.5s ease-in; width: auto; min-width: 150px; opacity: 0; pointer-events: none; }
+        .btn-start.visible { opacity: 1; pointer-events: auto; }
+        .btn-start:active { transform: scale(0.95); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        #quiz-screen { background-color: #130023; transition: background-image 0.5s ease-in-out; padding: 0; position: relative; overflow-y: visible; display: block; }
+        .progress-container { width: 90%; height: 6px; background: rgba(255,255,255,0.3); border-radius: 4px; position: fixed; top: 15px; left: 50%; transform: translateX(-50%); z-index: 100; max-width: 480px; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #ffd700, #ffecb3); width: 0%; transition: width 0.3s ease; }
+        .quiz-content-wrapper { width: 100%; min-height: 100vh; display: flex; flex-direction: column; transition: opacity 0.3s ease; }
+        .quiz-spacer { height: 65vh; width: 100%; flex-shrink: 0; }
+        .quiz-content { width: 100%; padding: 0 30px 60px 30px; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box; background: linear-gradient(to bottom, rgba(19,0,35,0) 0%, rgba(19,0,35,0.8) 20%, rgba(19,0,35,1) 100%); }
+        .question-text { font-family: 'Athiti', sans-serif; font-size: 1.8rem; font-weight: 600; color: white; line-height: 1.3; text-align: left; margin-bottom: 5px; text-shadow: 0 2px 4px rgba(0,0,0,0.6); min-height: 3em; }
+        .options-list { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+        .option-btn { background: rgba(255, 255, 255, 0.9); border: none; padding: 15px 20px; border-radius: 12px; text-align: left; font-size: 1.1rem; color: #2a2d43; cursor: pointer; transition: all 0.2s; font-family: 'Kanit', sans-serif; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .option-btn:hover { background: white; color: var(--primary-color); font-weight: 600; transform: translateX(5px); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .option-btn.selected { background-color: var(--primary-color); color: white; font-weight: 600; transform: translateX(5px); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        #flash-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: white; z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.1s ease-out; }
+        #flash-overlay.flash-active { opacity: 1; }
+        #loading-screen { background-image: var(--intro-background); background-size: cover; background-position: center; padding: 0; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .loader-card { font-size: 4rem; animation: spin 1s infinite linear; margin-bottom: 20px; }
+        #reveal-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #130023; z-index: 100; display: none; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: opacity 1s ease; }
+        #reveal-screen.active { display: flex; opacity: 1; }
+        .scene { width: 300px; height: 500px; perspective: 1000px; margin-bottom: 30px; }
+        .card-object { width: 100%; height: 100%; position: relative; transition: transform 0.8s; transform-style: preserve-3d; cursor: pointer; }
+        .card-object.is-flipped { transform: rotateY(180deg); }
+        .card-face { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 20px; background-size: cover; background-position: center; box-shadow: 0 0 50px rgba(212, 163, 115, 0.4); }
+        .card-back { background-image: var(--card-back); background-color: #1a1a2e; border: 2px solid var(--highlight-color); transform: rotateY(0deg); }
+        .card-front { background-color: var(--primary-color); border: 2px solid var(--highlight-color); transform: rotateY(180deg); }
+        .reveal-text { color: white; font-family: 'Athiti', sans-serif; font-size: 1.5rem; font-weight: 600; opacity: 0.8; animation: pulse 2s infinite; }
+
+        /* --- RESULT SCREEN --- */
+        #result-screen { 
+            padding: 20px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            position: relative; 
+            overflow: hidden; 
+        }
+        
+        #result-screen::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: var(--current-result-bg, var(--result-fallback-background));
+            background-size: cover;
+            background-position: center;
+            filter: blur(10px); 
+            z-index: 0;
+            opacity: 0.6; 
+        }
+        
+        .result-image-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 450px;
+            aspect-ratio: 9 / 16;
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            border: 2px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s;
+        }
+        .result-image-container:hover {
+            transform: scale(1.02);
+        }
+        
+        #result-final-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .promo-banner {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 450px;
+            aspect-ratio: 3 / 1;
+            background-image: var(--promo-banner-img);
+            background-size: cover;
+            background-position: center;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .promo-banner:active { transform: scale(0.98); }
+
+        .action-area { 
+            position: relative;
+            z-index: 1;
+            width: 100%; 
+            max-width: 450px;
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px; 
+            padding-bottom: 30px;
+        }
+        
+        .btn-action { 
+            width: 100%; 
+            padding: 16px; 
+            border: none; 
+            border-radius: 30px; 
+            font-family: 'Kanit', sans-serif; 
+            font-size: 1.1rem; 
+            font-weight: 600;
+            cursor: pointer; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 10px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); 
+            transition: transform 0.2s;
+        }
+        .btn-action:active { transform: scale(0.95); }
+
+        .btn-random { background: linear-gradient(135deg, #ffd700, #ffb74d); color: #2a2d43; }
+        .btn-restart { background-color: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(5px); }
+
+        /* --- POPUP (Randomizer) --- */
+        #random-popup { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background-color: rgba(0, 0, 0, 0.9); z-index: 2000; 
+            display: none; justify-content: center; align-items: center; 
+            opacity: 0; transition: opacity 0.3s ease; 
+        }
+        #random-popup.active { display: flex; opacity: 1; }
+
+        .popup-card-container {
+            width: 90vh; 
+            max-width: 90vw; 
+            height: 80vh; 
+            aspect-ratio: 9/16;
+            
+            /* Dynamic Background set by JS */
+            background-size: cover;
+            background-position: center;
+            
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(0,0,0,0.5);
+            border: 4px solid #ffd700;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 2rem;
+            color: white;
+            cursor: pointer;
+            z-index: 10;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* Top 40% for Product */
+        .popup-top-section {
+            height: 40%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 20px; 
+        }
+
+        .product-img-wrapper {
+            width: 250px;
+            height: 250px;
+            max-width: 80%; 
+            aspect-ratio: 1/1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: white; 
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            padding: 10px;
+        }
+
+        #random-result-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        /* Bottom 60% for Text & Button */
+        .popup-bottom-section {
+            height: 60%;
+            position: relative;
+            display: flex;
+            flex-direction: column; /* Stack text and button */
+            justify-content: center; /* Center vertically */
+            align-items: center;
+            padding: 20px;
+            gap: 15px;
+        }
+
+        /* Promo Text Styling */
+        .promo-text-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            font-family: 'Kanit', sans-serif;
+            font-size: 0.9rem;
+            color: #333;
+            line-height: 1.5;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            width: 100%;
+            opacity: 0; /* Hidden initially */
+            transition: opacity 0.5s;
+        }
+        .promo-text-container.visible { opacity: 1; }
+
+        .highlight-price {
+            color: #d32f2f; /* Red for price */
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+
+        @keyframes color-cycle {
+            0% { background-color: #ff0055; }
+            25% { background-color: #ffcc00; }
+            50% { background-color: #00cc66; }
+            75% { background-color: #0099ff; }
+            100% { background-color: #cc00ff; }
+        }
+
+        .highlight-coupon {
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-family: monospace; /* Monospace for code feeling */
+            font-size: 1.1em;
+            letter-spacing: 1px;
+            animation: color-cycle 3s infinite alternate; /* Color switching animation */
+            display: inline-block;
+            margin: 0 2px;
+        }
+
+        .btn-buy {
+            background-color: #00C853;
+            color: white;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-align: center;
+            font-family: 'Kanit', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(0,200,83,0.4);
+            transition: transform 0.2s, opacity 0.3s;
+            opacity: 0;
+            pointer-events: none;
+            border: 2px solid white;
+            width: 100%;
+        }
+        .btn-buy.visible { opacity: 1; pointer-events: auto; }
+        .btn-buy:active { transform: scale(0.95); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes zoomIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+
+    </style>
+</head>
+<body>
+
+    <!-- Flash Overlay -->
+    <div id="flash-overlay"></div>
+
+    <!-- Randomizer Popup (UPDATED Layout with Text) -->
+    <div id="random-popup">
+        <div class="popup-card-container">
+            <div class="popup-close" onclick="closeRandomPopup()">×</div>
+            
+            <div class="popup-top-section">
+                <div class="product-img-wrapper">
+                    <img id="random-result-img" src="" alt="Random Gift">
+                </div>
+            </div>
+            
+            <div class="popup-bottom-section">
+                <!-- Text Container (Hidden until spin stops) -->
+                <div id="promo-text-box" class="promo-text-container">
+                    <!-- Text injected by JS -->
+                </div>
+                
+                <a id="buy-btn" href="#" target="_blank" class="btn-buy">🛒 สั่งซื้อสินค้า</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 1: INTRO -->
+    <div id="intro-screen" class="screen active">
+        <button id="skip-btn" onclick="skipIntro()">SKIP >></button>
+        <div class="intro-content">
+            <p id="intro-desc"></p>
+            <button id="intro-btn" class="btn-start" onclick="startQuiz()">เริ่มทำแบบทดสอบ</button>
+        </div>
+    </div>
+
+    <!-- SCREEN 2: QUIZ -->
+    <div id="quiz-screen" class="screen">
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div class="quiz-content-wrapper">
+            <div class="quiz-spacer"></div>
+            <div class="quiz-content">
+                <div class="question-text" id="q-text">Loading...</div>
+                <div class="options-list" id="options-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 4: REVEAL SCREEN -->
+    <div id="reveal-screen">
+        <div class="scene">
+            <div class="card-object" onclick="flipCard()">
+                <div class="card-face card-back">
+                    <!-- Image handled by CSS -->
+                </div>
+                <div class="card-face card-front">
+                    <!-- Image handled by CSS/JS -->
+                </div>
+            </div>
+        </div>
+        <div class="reveal-text" id="reveal-text">แตะไพ่เพื่อเปิดคำทำนาย</div>
+    </div>
+
+    <!-- SCREEN 5: RESULT -->
+    <div id="result-screen" class="screen">
+        <!-- Result Image (9:16) -->
+        <div class="result-image-container">
+            <img id="result-final-img" src="" alt="Your Tarot Result">
+        </div>
+
+        <!-- Promo Banner -->
+        <div class="promo-banner" onclick="openRandomPopup()"></div>
+
+        <!-- Buttons -->
+        <div class="action-area">
+            <button class="btn-action btn-random" onclick="openRandomPopup()">
+                🎁 สุ่มของขวัญพิเศษ
+            </button>
+            <button class="btn-action btn-restart" onclick="location.reload()">
+                🔄 เล่นอีกครั้ง
+            </button>
+        </div>
+    </div>
+
+<script>
+    // --- UTILS & INTRO ---
+    let currentTypingTimer = null;
+    const introText = "ไม่มีใครรู้ว่าไพ่สำรับนี้ถือกำเนิดขึ้นเมื่อใด รู้เพียงว่ามันมักปรากฏขึ้นหลังจบเกม<br><br>เมื่อหมากถูกเก็บ การ์ดถูกสับกลับ และผู้เล่นต่างคิดว่าเรื่องราวนั้นสิ้นสุดลง<br><br>แต่ในเงามืดของโต๊ะ ยังมี “เทิร์นสุดท้าย” ที่ไม่เคยถูกเล่นอยู่<br><br>ไพ่ใบนี้ไม่ได้ทำนายผู้ชนะ และไม่ได้บอกอนาคต มันเพียงกระซิบว่า <br><br>\"การตัดสินใจที่คุณทำในเกมคือสิ่งเดียวกับที่คุณเลือกในชีวิตจริง\"<br><br>ผู้ที่ได้รับคำนายจากไพ่สำรับนี้จะไม่มองบอร์ดเกมเหมือนเดิมอีกต่อไป เพราะแท้จริงแล้ว เกมนั้นไม่เคยจบ มันแค่เปลี่ยนกระดานไป ก็เท่านั้น...";
+
+    function typeWriter(elementId, text, speed = 30, callback = null) {
+        const element = document.getElementById(elementId);
+        if (!element) return;
+        
+        element.innerHTML = '';
+        if (currentTypingTimer) clearTimeout(currentTypingTimer);
+        
+        let i = 0;
+        
+        function type() {
+            if (i < text.length) {
+                if (text.substring(i).startsWith('<br>')) { element.innerHTML += '<br>'; i += 4; } 
+                else { element.innerHTML += text.charAt(i); i++; }
+                currentTypingTimer = setTimeout(type, speed);
+            } else { if (callback) callback(); }
+        }
+        type();
+    }
+
+    function skipIntro() {
+        if (currentTypingTimer) clearTimeout(currentTypingTimer);
+        document.getElementById('intro-desc').innerHTML = introText;
+        document.getElementById('intro-btn').classList.add('visible');
+        const skipBtn = document.getElementById('skip-btn');
+        if(skipBtn) skipBtn.style.display = 'none';
+    }
+
+    window.onload = function() {
+        setTimeout(() => {
+            const skipBtn = document.getElementById('skip-btn');
+            if(skipBtn) skipBtn.style.display = 'block';
+            setTimeout(() => { skipBtn.style.opacity = '1'; }, 10);
+            typeWriter('intro-desc', introText, 30, () => {
+                document.getElementById('intro-btn').classList.add('visible');
+                if(skipBtn) skipBtn.style.display = 'none';
+            });
+        }, 1500); 
+    };
+
+    // --- DATA ---
+    const questions = [
+        {
+            q: "1. คุณกำลังเดินทางไปยัง... ในระหว่างทาง คุณพบกองไพ่กองหนึ่งอยู่บนทางเดิน และมีไพ่คว่ำแยกไว้ เหมือนมันรอให้คุณหยิบมันมานาน คุณจะทำอย่างไร?",
+            color: "#4a4e69",
+            options: [
+                { text: "1. หยิบขึ้นมาดูทันที แม้ไม่รู้ผลลัพธ์", scores: { R: 2, T: 1 } },
+                { text: "2. สับรวมกับไพ่ที่เหลือ ปล่อยให้ดวงตัดสิน", scores: { R: 1, O: 1 } },
+                { text: "3. ตรวจดูสัญลักษณ์และรายละเอียดอย่างละเอียด", scores: { O: 2, S: 1 } },
+                { text: "4. ชวนทุกคนมาดูและตัดสินใจร่วมกัน", scores: { C: 2, O: 1 } },
+                { text: "5. เก็บไว้ก่อน รอจังหวะที่เหมาะสม", scores: { S: 2, O: 1 } }
+            ]
+        },
+        {
+            q: "2. คุณได้ก้าวเท้าเดินทางต่อ แต่เส้นทางที่พบข้างหน้าไม่ชัดเจน คุณจะเลือกเดินต่ออย่างไร?",
+            color: "#9a8c98",
+            options: [
+                { text: "1. เดินต่อไปก่อน เดี๋ยวทางมันจะชัดเอง", scores: { R: 2, T: 1 } },
+                { text: "2. หยุดคิด วิเคราะห์ความเป็นไปได้ของแต่ละเส้น", scores: { R: 1, T: 1 } },
+                { text: "3. มองหาสัญญาณเล็ก ๆ รอบตัวก่อนตัดสินใจ", scores: { O: 2, S: 1 } },
+                { text: "4. เลือกเส้นที่รู้สึก “ใช่” แม้ไม่มีเหตุผลชัดเจน", scores: { C: 2, O: 1 } },
+                { text: "5. รอให้มีเหตุการณ์หรือใครสักคนมากระตุ้นการตัดสินใจ", scores: { S: 2, O: 1 } }
+            ]
+        },
+        {
+            q: "3. หลังจากเลือกเดินต่อไป แล้วมีบางอย่างไม่ปกติกำลังตามคุณมา คุณจะรับมืออย่างไร?",
+            color: "#c9ada7",
+            options: [
+                { text: "1. เร่งฝีเท้าหนีออกจากสถานการณ์ทันที", scores: { R: 2, T: 1 } },
+                { text: "2. ตั้งสติ ประเมินว่าเงานั้นคือภัยจริงหรือแค่ความกลัว", scores: { T: 1, R: 1 } },
+                { text: "3. ซ่อนตัวและเฝ้าดูความเคลื่อนไหวอย่างเงียบ ๆ", scores: { S: 2, O: 1 } },
+                { text: "4. หันกลับไปเผชิญหน้า เพื่อหยุดมันตั้งแต่ต้น", scores: { C: 2, S: 1 } },
+                { text: "5. ใช้เส้นทางอ้อม วางแผนให้มันตามไม่ทัน", scores: { O: 1, S: 2 } }
+            ]
+        },
+        {
+            q: "4. เมื่อการหลบหนีจากเงามืดมีแต่จะทำให้สถานการณ์แย่ลง คุณจะเลือกอะไรแทน?",
+            color: "#d4a373",
+            options: [
+                { text: "1. อดทนรอจังหวะที่เหมาะสม แม้ต้องอยู่กับความกลัว", scores: { R: 1, C: 1 } },
+                { text: "2. ใช้ข้อมูลที่มี วิเคราะห์จุดอ่อนของสถานการณ์", scores: { O: 1, R: 1 } },
+                { text: "3. เปลี่ยนมุมมอง คิดทางออกที่ไม่เคยคิดมาก่อน", scores: { O: 2, S: 1 } },
+                { text: "4. ขอความช่วยเหลือ หรือสร้างพันธมิตรชั่วคราว", scores: { C: 2, O: 1 } },
+                { text: "5. ยอมเสียบางอย่าง เพื่อรักษาสิ่งที่สำคัญกว่า", scores: { S: 2, C: 1 } }
+            ]
+        },
+        {
+            q: "5. เมื่อคุณไม่มีที่ให้ถอยอีกต่อไป คุณจะยืนหยัดในแบบใด?",
+            color: "#2a2d43",
+            options: [
+                { text: "1. ใช้พลังใจล้วน ๆ ดันผ่านสถานการณ์ไปให้ได้", scores: { R: 2, T: 1 } },
+                { text: "2. ควบคุมอารมณ์ ไม่ให้ความกลัวครอบงำการตัดสินใจ", scores: { R: 1, O: 1 } },
+                { text: "3. เลือกเผชิญหน้าแบบมีแผน ไม่ใช่ใช้อารมณ์", scores: { S: 2, O: 1 } },
+                { text: "4. ปกป้องสิ่งที่สำคัญ แม้ต้องแลกกับความเสี่ยง", scores: { C: 2, S: 1 } },
+                { text: "5. เชื่อว่าทุกอย่างมีจังหวะของมัน และรอช่วงเวลาที่เหมาะสม", scores: { S: 1, O: 2 } }
+            ]
+        },
+        {
+            q: "6. เมื่อคุณต้องเลือกเพียงการกระทำเดียว ที่จะเปลี่ยนผลลัพธ์ทั้งหมด คุณจะเลือกแบบไหน?",
+            color: "#5e548e",
+            options: [
+                { text: "1. การกระทำที่รวดเร็วที่สุด แม้ผลลัพธ์จะคาดเดายาก", scores: { T: 2, R: 1 } },
+                { text: "2. การกระทำที่ผ่านการคิดรอบด้านแล้ว", scores: { R: 1, O: 1 } },
+                { text: "3. การกระทำที่สอดคล้องกับตัวตนของคุณที่สุด", scores: { S: 2, O: 1 } },
+                { text: "4. การกระทำที่ส่งผลต่อคนรอบข้างมากที่สุด", scores: { C: 2, O: 1 } },
+                { text: "5. การกระทำที่เปิดโอกาสใหม่ แม้ต้องเริ่มจากศูนย์", scores: { S: 2, T: 1 } }
+            ]
+        },
+        {
+            q: "7. เมื่อการปะทะจบลง และคุณยืนอยู่ท่ามกลางชัยชนะ สิ่งใดคือความหมายของชัยชนะครั้งนี้สำหรับคุณ?",
+            color: "#231942",
+            options: [
+                { text: "1. ฉันพิสูจน์ให้ตัวเองเห็นว่า “กล้าลงมือ” สำคัญแค่ไหน", scores: { R: 2, T: 1 } },
+                { text: "2. ฉันชนะเพราะเลือกจังหวะและการตัดสินใจที่ถูกต้อง", scores: { S: 2, O: 1 } },
+                { text: "3. ฉันเข้าใจตัวเองมากขึ้น ว่าจริง ๆ แล้วฉันเป็นใคร", scores: { O: 2, S: 1 } },
+                { text: "4. ฉันไม่ชนะเพียงลำพัง สิ่งรอบตัวและผู้คนมีความหมาย", scores: { C: 2, O: 1 } },
+                { text: "5. ชัยชนะนี้ไม่ใช่จุดจบ แต่คือจุดเริ่มของการเดินทางใหม่", scores: { R: 1, S: 1 } }
+            ]
+        }
+    ];
+
+    // Added 'coupon' key to each card
+    const tarotCards = [
+        { id: 0, name: 'The Fool', title: 'The Explorer', emoji: '🎒', main: 'R', sub: 'T', coupon: 'TOWERTF' },
+        { id: 1, name: 'The Magician', title: 'The Strategist', emoji: '✨', main: 'S', sub: 'T', coupon: 'TOWERMG' },
+        { id: 2, name: 'The High Priestess', title: 'The Intuitive', emoji: '🌙', main: 'O', sub: 'S', coupon: 'TOWERHP' },
+        { id: 3, name: 'The Empress', title: 'The Nurturer', emoji: '🌸', main: 'C', sub: 'O', coupon: 'TOWERES' },
+        { id: 4, name: 'The Emperor', title: 'The Leader', emoji: '👑', main: 'S', sub: 'O', coupon: 'TOWEREM' },
+        { id: 5, name: 'The Hierophant', title: 'The Traditionalist', emoji: '📜', main: 'O', sub: 'C', coupon: 'TOWERHT' },
+        { id: 6, name: 'The Lovers', title: 'The Connector', emoji: '❤️', main: 'C', sub: 'R', coupon: 'TOWERLV' },
+        { id: 7, name: 'The Chariot', title: 'The Competitor', emoji: '🏁', main: 'T', sub: 'R', coupon: 'TOWERCR' },
+        { id: 8, name: 'Strength', title: 'The Calm Power', emoji: '🦁', main: 'C', sub: 'R', coupon: 'TOWERST' },
+        { id: 9, name: 'The Hermit', title: 'The Thinker', emoji: '🕯️', main: 'S', sub: 'O', coupon: 'TOWERHM' },
+        { id: 10, name: 'Wheel of Fortune', title: 'The Risk Taker', emoji: '🎲', main: 'R', sub: 'T', coupon: 'TOWERWF' },
+        { id: 11, name: 'Justice', title: 'The Balancer', emoji: '⚖️', main: 'O', sub: 'S', coupon: 'TOWERJT' },
+        { id: 12, name: 'The Hanged Man', title: 'The Outsider', emoji: '🔄', main: 'O', sub: 'C', coupon: 'TOWERHM' }, // Note: HM same as Hermit in prompt
+        { id: 13, name: 'Death', title: 'The Transformer', emoji: '💀', main: 'R', sub: 'S', coupon: 'TOWERDE' },
+        { id: 14, name: 'Temperance', title: 'The Harmonizer', emoji: '🌈', main: 'C', sub: 'O', coupon: 'TOWERTP' },
+        { id: 15, name: 'The Devil', title: 'The Trickster', emoji: '😈', main: 'R', sub: 'C', coupon: 'TOWERDV' },
+        { id: 16, name: 'The Tower', title: 'The Chaos Bringer', emoji: '⚡', main: 'R', sub: 'T', coupon: 'TOWERTW' },
+        { id: 17, name: 'The Star', title: 'The Optimist', emoji: '✨', main: 'C', sub: 'O', coupon: 'TOWERSR' },
+        { id: 18, name: 'The Moon', title: 'The Deceiver', emoji: '🌑', main: 'O', sub: 'R', coupon: 'TOWERMO' },
+        { id: 19, name: 'The Sun', title: 'The Entertainer', emoji: '☀️', main: 'T', sub: 'C', coupon: 'TOWERTS' },
+        { id: 20, name: 'Judgement', title: 'The Challenger', emoji: '🔔', main: 'S', sub: 'C', coupon: 'TOWERJM' },
+        { id: 21, name: 'The World', title: 'The Mastermind', emoji: '🌍', main: 'O', sub: 'C', coupon: 'TOWERWO' }
+    ];
+
+    // --- PRODUCTS DATA (Updated with names) ---
+    const products = [
+        { img: 'images/product_1.png', url: 'https://example.com/product_1', name: '27 METRES TH/EN' },
+        { img: 'images/product_2.png', url: 'https://example.com/product_2', name: 'PIXIES TH/EN' },
+        { img: 'images/product_3.png', url: 'https://example.com/product_3', name: 'HANABI ฮานาบิ TH' },
+        { img: 'images/product_4.png', url: 'https://example.com/product_4', name: 'TACO KITTEN PIZZA ทาโก้ เหมียว พิซซ่า TH/EN' },
+        { img: 'images/product_5.png', url: 'https://example.com/product_5', name: 'FLIP 7 การ์ดไม่ซ้ำ ทำให้ได้ TH/EN' },
+        { img: 'images/product_6.png', url: 'https://example.com/product_6', name: 'SEA, SALT & PAPER ทะเล เกลือ และเรือพับ TH/EN' },
+        { img: 'images/product_7.png', url: 'https://example.com/product_7', name: 'TACO CAT GOAT CHEESE PIZZA ทาโก้ แมว แพะ ชีส พิซซ่า TH/EN' },
+        { img: 'images/product_8.png', url: 'https://example.com/product_8', name: 'TRIO TH/EN' },
+        { img: 'images/product_9.png', url: 'https://example.com/product_9', name: 'YOGI โยคี 2ND EDITION TH' }
+    ];
+
+    // Card Name to Product Index Mapping (0-8) - Matches Product Index
+    const cardToProductIndex = {
+        "The Lovers": 0, "Justice": 0, "The World": 0, // product_1
+        "Strength": 1, "The Sun": 1, "Death": 1, // product_2
+        "The Fool": 2, "Judgement": 2, "The Tower": 2, // product_3
+        "Wheel of Fortune": 3, "The High Priestess": 3, "The Hanged Man": 3, // product_4
+        "The Chariot": 4, "The Magician": 4, // product_5
+        "The Devil": 5, "The Moon": 5, // product_6
+        "Temperance": 6, "The Emperor": 6, // product_7
+        "The Empress": 7, "The Hierophant": 7, // product_8
+        "The Star": 8, "The Hermit": 8 // product_9
+    };
+
+    let currentQIndex = 0;
+    let scores = { S: 5, T: 5, C: 5, R: 5, O: 5 };
+    let currentBestCard = null; 
+    let randomInterval = null;
+
+    // ... (StartQuiz, RenderQuestion, SelectOption, TriggerFinish - Unchanged) ...
+    function startQuiz() {
+        scrollToTop();
+        const introScreen = document.getElementById('intro-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        introScreen.style.opacity = '0';
+        setTimeout(() => {
+            introScreen.classList.remove('active');
+            introScreen.style.display = 'none';
+            quizScreen.style.display = 'block';
+            quizScreen.classList.add('active');
+            quizScreen.style.opacity = '0';
+            setTimeout(() => {
+                quizScreen.style.opacity = '1';
+                renderQuestion();
+            }, 50);
+        }, 800); 
+    }
+
+    function renderQuestion() {
+        scrollToTop();
+        const qData = questions[currentQIndex];
+        const percent = ((currentQIndex) / questions.length) * 100;
+        document.getElementById('progressBar').style.width = percent + '%';
+        typeWriter('q-text', qData.q, 40); 
+        
+        const quizScreen = document.getElementById('quiz-screen');
+        const bgVars = ['--quiz-first-background', '--quiz-second-background', '--quiz-third-background', '--quiz-fourth-background', '--quiz-fifth-background', '--quiz-sixth-background', '--quiz-seventh-background'];
+        if (quizScreen) quizScreen.style.backgroundImage = `var(${bgVars[currentQIndex]})`;
+
+        const optsContainer = document.getElementById('options-container');
+        optsContainer.innerHTML = '';
+        qData.options.forEach((opt, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt.text;
+            btn.style.animation = `fadeIn 0.3s ease forwards ${0.2 + (idx * 0.1)}s`; 
+            btn.style.opacity = '0'; 
+            btn.onclick = (e) => selectOption(e.target, opt.scores);
+            optsContainer.appendChild(btn);
+        });
+    }
+
+    function selectOption(btn, points) {
+        const allBtns = document.querySelectorAll('.option-btn');
+        allBtns.forEach(b => b.disabled = true); 
+        btn.classList.add('selected');
+        for (let key in points) scores[key] += points[key];
+        setTimeout(() => {
+            const contentWrapper = document.querySelector('.quiz-content-wrapper');
+            contentWrapper.style.opacity = '0';
+            setTimeout(() => {
+                scrollToTop();
+                currentQIndex++;
+                if (currentQIndex < questions.length) {
+                    renderQuestion();
+                    contentWrapper.style.opacity = '1';
+                } else {
+                    triggerFinish();
+                }
+            }, 300);
+        }, 600);
+    }
+
+    function triggerFinish() {
+        document.getElementById('progressBar').style.width = '100%';
+        setTimeout(() => {
+            const flashOverlay = document.getElementById('flash-overlay');
+            flashOverlay.classList.add('flash-active');
+            setTimeout(() => {
+                const quizScreen = document.getElementById('quiz-screen');
+                quizScreen.classList.remove('active');
+                quizScreen.style.display = 'none';
+                calculateResult(); 
+                setTimeout(() => { flashOverlay.classList.remove('flash-active'); }, 100);
+            }, 500);
+        }, 500);
+    }
+
+    function calculateResult() {
+        for (let key in scores) scores[key] = Math.min(10, Math.max(1, scores[key]));
+        let candidates = [];
+        let maxMatchScore = -1;
+        tarotCards.forEach(card => {
+            let match = (scores[card.main] * 2) + (scores[card.sub] * 1);
+            if (match > maxMatchScore) { maxMatchScore = match; candidates = [card]; } 
+            else if (match === maxMatchScore) { candidates.push(card); }
+        });
+
+        const topCandidate = candidates[0];
+        let finalCardName = topCandidate.name;
+        
+        if (candidates.some(c => c.name === 'The Emperor') && candidates.some(c => c.name === 'The Hermit')) {
+             if (scores.C >= 6) finalCardName = 'The Emperor'; else if (scores.C <= 4) finalCardName = 'The Hermit'; else if (scores.C === 5) { if (scores.T >= 6) finalCardName = 'The Emperor'; else finalCardName = 'The Hermit'; }
+        }
+        else if (candidates.some(c => c.name === 'The Fool')) {
+            if (scores.S <= 4 && scores.O <= 4) finalCardName = 'The Fool'; else if (scores.S >= 5 && scores.S <= 6 && scores.O >= 4 && scores.O <= 5) finalCardName = 'Wheel of Fortune'; else if (scores.S >= 6 && scores.O <= 3) finalCardName = 'The Tower'; else finalCardName = 'Wheel of Fortune';
+        }
+        else if (candidates.some(c => c.name === 'The High Priestess') && candidates.some(c => c.name === 'Justice')) {
+            if (scores.C <= 4) finalCardName = 'The High Priestess'; else if (scores.C >= 6) finalCardName = 'Justice'; else if (scores.C === 5) { if (scores.R <= 4) finalCardName = 'Justice'; else finalCardName = 'The High Priestess'; }
+        }
+        else if (candidates.some(c => c.name === 'The Empress')) {
+            if (scores.T >= 6) finalCardName = 'The Empress'; else if (scores.T >= 4 && scores.T <= 5 && scores.S >= 6) finalCardName = 'Temperance'; else if (scores.T <= 4) finalCardName = 'The Star'; else finalCardName = 'Temperance';
+        }
+        else if (candidates.some(c => c.name === 'The Hierophant')) {
+            if (scores.S <= 4 && scores.O >= 6) finalCardName = 'The Hierophant'; else if (scores.R >= 6) finalCardName = 'The Hanged Man'; else if (scores.S >= 5 && scores.R <= 5) finalCardName = 'The World'; else finalCardName = 'The World';
+        }
+        else if (candidates.some(c => c.name === 'The Lovers') && candidates.some(c => c.name === 'Strength')) {
+            if (scores.R >= 6) finalCardName = 'The Lovers'; else if (scores.R <= 4) finalCardName = 'Strength'; else if (scores.R === 5) { if (scores.O >= 6) finalCardName = 'Strength'; else finalCardName = 'The Lovers'; }
+        }
+
+        const bestCard = tarotCards.find(c => c.name === finalCardName) || candidates[0];
+        currentBestCard = bestCard; 
+
+        const revealScreen = document.getElementById('reveal-screen');
+        revealScreen.classList.add('active');
+        revealScreen.style.opacity = '1';
+        const cardObject = document.querySelector('.card-object');
+        cardObject.classList.remove('is-flipped');
+        document.getElementById('reveal-text').innerText = "แตะไพ่เพื่อเปิดคำทำนาย";
+        const cardVarName = `--card-front-${bestCard.name.toLowerCase().replace(/ /g, '')}`;
+        document.querySelector('.card-front').style.backgroundImage = `var(${cardVarName})`;
+    }
+
+    function flipCard() {
+        const cardObject = document.querySelector('.card-object');
+        if (cardObject.classList.contains('is-flipped')) return; 
+        cardObject.classList.add('is-flipped');
+        document.getElementById('reveal-text').innerText = currentBestCard.name;
+        setTimeout(() => {
+            const revealScreen = document.getElementById('reveal-screen');
+            revealScreen.style.opacity = '0';
+            setTimeout(() => {
+                revealScreen.classList.remove('active');
+                renderResult(currentBestCard);
+            }, 1000); 
+        }, 2500); 
+    }
+
+    function renderResult(card) {
+        scrollToTop();
+        const resultScreen = document.getElementById('result-screen');
+        resultScreen.classList.add('active');
+        setTimeout(() => { resultScreen.style.opacity = '1'; }, 100);
+
+        const resultImgUrl = `images/summary_${card.name.toLowerCase().replace(/ /g, '_')}.png`;
+        document.getElementById('result-final-img').src = resultImgUrl;
+        
+        const bgVarName = `--result-${card.name.toLowerCase().replace(/ /g, '')}-background`;
+        resultScreen.style.setProperty('--current-result-bg', `var(${bgVarName})`);
+    }
+
+    // --- RANDOMIZER LOGIC (UPDATED) ---
+    function openRandomPopup() {
+        const popup = document.getElementById('random-popup');
+        const img = document.getElementById('random-result-img');
+        const buyBtn = document.getElementById('buy-btn');
+        const container = document.querySelector('.popup-card-container');
+        const textBox = document.getElementById('promo-text-box');
+        
+        // 1. Set Background based on Current Best Card
+        if (currentBestCard) {
+            const bgVarName = `--popup-bg-${currentBestCard.name.toLowerCase().replace(/ /g, '')}`;
+            container.style.backgroundImage = `var(${bgVarName})`;
+        }
+
+        popup.classList.add('active');
+        buyBtn.classList.remove('visible'); 
+        textBox.classList.remove('visible'); // Hide text initially
+        
+        // Determine Target Product and Coupon
+        let targetIndex = 0;
+        let couponCode = 'TOWERGAME'; // Default fallback
+        if (currentBestCard && cardToProductIndex.hasOwnProperty(currentBestCard.name)) {
+            targetIndex = cardToProductIndex[currentBestCard.name];
+            couponCode = currentBestCard.coupon;
+        }
+
+        // Start Cycling
+        let i = 0;
+        randomInterval = setInterval(() => {
+            img.src = products[i].img; 
+            i = (i + 1) % products.length;
+        }, 100); 
+
+        // Stop after 3 seconds
+        setTimeout(() => {
+            clearInterval(randomInterval);
+            const finalProduct = products[targetIndex];
+            
+            img.src = finalProduct.img;
+            buyBtn.href = finalProduct.url; 
+            
+            // Set Promo Text with Coupon
+            textBox.innerHTML = `เราขอมอบของขวัญสุดพิเศษให้กับคุณในการซื้อบอร์ดเกม <strong>${finalProduct.name}</strong> ในราคาเพียง <span class="highlight-price">399 บาท</span>เท่านั้น<br><br>โดยสามารถรับสิทธิพิเศษนี้โดยกรอกโค้ดลับ <span class="highlight-coupon">${couponCode}</span> ในตะกร้าสินค้า และชำระเงินได้เลย`;
+            
+            // Show elements
+            buyBtn.classList.add('visible');
+            textBox.classList.add('visible');
+        }, 3000);
+    }
+
+    function closeRandomPopup() {
+        const popup = document.getElementById('random-popup');
+        popup.classList.remove('active');
+        if (randomInterval) clearInterval(randomInterval);
+    }
+
+    function captureAndShare() {
+        const captureElement = document.getElementById('result-capture-area');
+        const btn = document.querySelector('.btn-share');
+        const originalText = btn.innerHTML;
+        btn.innerText = '⏳ กำลังบันทึกภาพ...';
+
+        htmlToImage.toPng(captureElement, { quality: 1.0, pixelRatio: 2 })
+            .then(function (dataUrl) {
+                const link = document.createElement('a');
+                link.download = 'boardgame-personality-story.png';
+                link.href = dataUrl;
+                link.click();
+                btn.innerHTML = originalText;
+                alert("บันทึกรูปภาพเรียบร้อยแล้ว!\nคุณสามารถนำไปแชร์ต่อใน Stories ได้เลย");
+            })
+            .catch(function (error) {
+                console.error('oops, something went wrong!', error);
+                btn.innerHTML = originalText;
+                alert("เกิดข้อผิดพลาดในการบันทึกภาพ");
+            });
+    }
+
+    function scrollToTop() {
+        window.scrollTo(0,0);
+    }
+</script>
+
+</body>
+</html>
